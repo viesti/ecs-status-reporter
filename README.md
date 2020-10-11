@@ -4,7 +4,7 @@ Terraform module for a Lambda function that reports ECS service status to Slack 
 
 The Lambda function is written in Clojure and run by Babashka using [babashka-lambda-layer](https://github.com/dainiusjocas/babashka-lambda-layer).
 
-Currently all ECS Task State Change events are reported.
+Currently state changes started by events rules report the task duration, other states are reported as-is.
 
 ## Usage
 
