@@ -22,7 +22,7 @@ module "ecs_status_reporter" {
 
 ## Examples
 
-Schedules task report
+Scheduled task report
 
 ![scheduled-task.png](doc/scheduled-task.png)
 
