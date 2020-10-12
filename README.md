@@ -19,3 +19,13 @@ module "ecs_status_reporter" {
   slack_webhook_url = "..."
 }
 ```
+
+## Examples
+
+Schedules task report
+
+![scheduled-task.png](doc/scheduled-task.png)
+
+Service report
+
+![service.png](doc/service.png)
