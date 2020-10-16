@@ -23,7 +23,7 @@ Then, add the following into your `.tf` file:
 ```hcl
 module "ecs_status_reporter" {
   # Use ref=<git hash> to pick a specific version
-  source = "git@github.com:viesti/ecs-status-reporter?ref=f83d1f19d9bb22cbf5ffc77cc70f9f9a88a8b2e1"
+  source = "git@github.com:viesti/ecs-status-reporter?ref=9e2a5d6e3d85e0f9091c1ba91a387eff0b05269e"
 
   bot_name = "ecs-status"
   slack_webhook_url = "..."
