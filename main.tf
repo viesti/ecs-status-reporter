@@ -2,8 +2,8 @@ resource "aws_lambda_layer_version" "lambda_layer" {
   layer_name  = "${var.bot_name}-babashka-runtime"
   description = "Provides a runtime for running Clojure scripts via Babashka: https://github.com/borkdude/babashka"
 
-  s3_bucket = "awsserverlessrepo-changesets-18ssd5swmy82n"
-  s3_key    = "096681235511/arn:aws:serverlessrepo:us-east-1:209523798522:applications-babashka-runtime-versions-0.1.0/051e10fc-afe2-40ce-ab64-8a6bec39e3b2"
+  s3_bucket = var.layer_s3_bucket
+  s3_key    = var.layer_s3_object
 
   compatible_runtimes = ["provided"]
 }
