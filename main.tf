@@ -4,24 +4,12 @@ data "external" "serverlessrepo-cf-template" {
     "--application-id", "arn:aws:serverlessrepo:us-east-1:209523798522:applications/babashka-runtime"]
 }
 
-resource "null_resource" "get_cf_template" {
-  triggers = {
-    cf_template = data.external.serverlessrepo-cf-template.result.TemplateUrl
-  }
-
-  provisioner "local-exec" {
-    command = "curl '${data.external.serverlessrepo-cf-template.result.TemplateUrl}' > /tmp/serverlessrepo-babashka-template-${self.id}.yml"
-  }
-
-  provisioner "local-exec" {
-    when    = destroy
-    command = "rm -f /tmp/serverlessrepo-babashka-template-${self.id}.yml"
-  }
-
+data "http" "cf_template" {
+  url = data.external.serverlessrepo-cf-template.result.TemplateUrl
 }
 
 locals {
-  babashka_cf = yamldecode(file("/tmp/serverlessrepo-babashka-template-${null_resource.get_cf_template.id}.yml"))
+  babashka_cf = yamldecode(data.http.cf_template.body)
   layer_bucket = local.babashka_cf.Resources.BabashkaLayer.Properties.ContentUri.Bucket
   layer_key = local.babashka_cf.Resources.BabashkaLayer.Properties.ContentUri.Key
 }
