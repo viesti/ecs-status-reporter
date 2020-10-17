@@ -1,0 +1,4 @@
+ecs-status.zip
+.terraform
+terraform.tfstate.backup
+terraform.tfstate

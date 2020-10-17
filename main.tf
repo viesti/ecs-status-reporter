@@ -1,9 +1,37 @@
+data "external" "serverlessrepo-cf-template" {
+  program = [
+    "aws", "serverlessrepo", "create-cloud-formation-template",
+    "--application-id", "arn:aws:serverlessrepo:us-east-1:209523798522:applications/babashka-runtime"]
+}
+
+resource "null_resource" "get_cf_template" {
+  triggers = {
+    cf_template = data.external.serverlessrepo-cf-template.result.TemplateUrl
+  }
+
+  provisioner "local-exec" {
+    command = "curl '${data.external.serverlessrepo-cf-template.result.TemplateUrl}' > /tmp/serverlessrepo-babashka-template-${self.id}.yml"
+  }
+
+  provisioner "local-exec" {
+    when    = destroy
+    command = "rm -f /tmp/serverlessrepo-babashka-template-${self.id}.yml"
+  }
+
+}
+
+locals {
+  babashka_cf = yamldecode(file("/tmp/serverlessrepo-babashka-template-${null_resource.get_cf_template.id}.yml"))
+  layer_bucket = local.babashka_cf.Resources.BabashkaLayer.Properties.ContentUri.Bucket
+  layer_key = local.babashka_cf.Resources.BabashkaLayer.Properties.ContentUri.Key
+}
+
 resource "aws_lambda_layer_version" "lambda_layer" {
   layer_name  = "${var.bot_name}-babashka-runtime"
   description = "Provides a runtime for running Clojure scripts via Babashka: https://github.com/borkdude/babashka"
 
-  s3_bucket = var.layer_s3_bucket
-  s3_key    = var.layer_s3_object
+  s3_bucket = local.layer_bucket
+  s3_key    = local.layer_key
 
   compatible_runtimes = ["provided"]
 }

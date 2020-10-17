@@ -7,13 +7,3 @@ variable "bot_name" {
   description = "Bot name, used for prefixing resources created by the module"
   type        = string
 }
-
-variable "layer_s3_bucket" {
-  description = "S3 bucket of the Babashka layer"
-  type        = string
-}
-
-variable "layer_s3_object" {
-  description = "S3 object of the Babashka layer"
-  type        = string
-}
